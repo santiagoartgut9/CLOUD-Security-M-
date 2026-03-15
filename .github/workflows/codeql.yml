@@ -1,3 +1,28 @@
-- name: Build Java
-  run: |
-    mvn clean package -f tools/deploy/module2/pom.xml
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java
+
+      - name: Build Java
+        run: |
+          mvn clean package -f tools/deploy/module2/pom.xml
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
